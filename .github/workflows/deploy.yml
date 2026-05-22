@@ -37,21 +37,15 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            cat > key.pem << 'EOF'
-            ${{ secrets.EC2_SSH_KEY }}
-            EOF
-
             chmod 400 Devops-ev2.pem
 
-            ssh -o StrictHostKeyChecking=no \
-              -i key.pem \
-              ${{ secrets.EC2_USER }}@${{ secrets.PRIVATE_EC2_IP }} << 'EOF'
-
-                docker stop backend_proyecto || true
-                docker rm backend_proyecto || true
-
-                docker pull "${{ secrets.DOCKERHUB_USERNAME }}/backend-eval2:latest"
-
+            ssh \
+              -o StrictHostKeyChecking=no \
+              -i Devops-ev2.pem \
+              ${{ secrets.EC2_USER }}@${{ secrets.PRIVATE_EC2_IP }} "
+                docker stop backend_proyecto || true &&
+                docker rm backend_proyecto || true &&
+                docker pull '${{ secrets.DOCKERHUB_USERNAME }}/backend-eval2:latest' &&
                 docker run -d \
                   --name backend_proyecto \
                   -p 3000:3000 \
@@ -60,8 +54,5 @@ jobs:
                   -e DB_USER=app_user \
                   -e DB_PASSWORD='DevOps123!' \
                   -e DB_NAME=proyecto_db \
-                  "${{ secrets.DOCKERHUB_USERNAME }}/backend-eval2:latest"
-
-            EOF
-
-            rm -f key.pem
+                  '${{ secrets.DOCKERHUB_USERNAME }}/backend-eval2:latest'
+              "
