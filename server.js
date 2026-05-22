@@ -143,9 +143,9 @@ app.use((err, req, res, next) => {
 });
 
 // Iniciar el servidor
-app.listen(3000, '0.0.0.0', () => {
-    console.log(`Servidor backend corriendo en el puerto 3000`);
-    console.log(`API disponible en: http://localhost:3000`);
+app.listen(PORT, () => {
+    console.log(`Servidor backend corriendo en el puerto ${PORT}`);
+    console.log(`API disponible en: http://localhost:${PORT}`);
 });
 
 // Exportar la app para pruebas
