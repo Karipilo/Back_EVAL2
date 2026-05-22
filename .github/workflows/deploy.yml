@@ -38,6 +38,7 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             ssh -o StrictHostKeyChecking=no \
+              -i Devops-ev2.pem \
               ${{ secrets.EC2_USER }}@${{ secrets.PRIVATE_EC2_IP }} "
                 docker stop backend_proyecto || true &&
                 docker rm backend_proyecto || true &&
